@@ -1,4 +1,5 @@
 # ThermalGuard AI — Working Prototype (Live Data)
+<img width="1913" height="908" alt="Screenshot 2026-09-20 014121" src="https://github.com/user-attachments/assets/8b90a94b-b187-4d47-871d-e029deaa7100" />
 
 Real, runnable implementation of the CFSA (Context-Based Fire Source
 Assessment) pipeline, wired to your actual FIRMS key, Overpass API, and
