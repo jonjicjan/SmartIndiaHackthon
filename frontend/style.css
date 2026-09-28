@@ -1,0 +1,1371 @@
+/* ThermalGuard AI — Dark GIS Intelligence Analyst Workspace Stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg-deep: #070b12;
+  --bg-dark: #0c121d;
+  --bg-card: #121b2a;
+  --bg-card-hover: #172336;
+  --bg-glass: rgba(18, 27, 42, 0.85);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(0, 229, 163, 0.35);
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  /* Operational Classification Tokens */
+  --color-abnormal: #ff4d4d;
+  --color-abnormal-glow: rgba(255, 77, 77, 0.35);
+  --color-persistent: #00e5a3;
+  --color-persistent-glow: rgba(0, 229, 163, 0.35);
+  --color-natural: #ffa726;
+  --color-agri: #a3e635;
+  --color-mining: #94a3b8;
+  --color-insufficient: #38bdf8;
+  --color-uncertain: #64748b;
+
+  --accent-cyan: #06b6d4;
+  --accent-blue: #3b82f6;
+
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* App Shell Layout */
+#app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+/* 1. Header Bar */
+#top-header {
+  height: 52px;
+  background: linear-gradient(180deg, #0f1725 0%, #0a101b 100%);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  z-index: 20;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, rgba(255, 77, 77, 0.2), rgba(0, 229, 163, 0.2));
+  border: 1px solid rgba(0, 229, 163, 0.4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.brand-title-wrap h1 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-title-wrap h1 span {
+  color: var(--color-persistent);
+}
+
+.brand-subtitle {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
+}
+
+/* Header Center: Mode Switcher */
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.live-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  background: rgba(0, 229, 163, 0.1);
+  border: 1px solid rgba(0, 229, 163, 0.3);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-persistent);
+  letter-spacing: 0.6px;
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-persistent);
+  box-shadow: 0 0 10px var(--color-persistent);
+  animation: pulse 1.8s infinite;
+}
+
+.mode-toggle-group {
+  display: flex;
+  background: #080d15;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-btn.active {
+  background: var(--bg-card);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Header Right */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.clock-display {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.alerts-header-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 77, 77, 0.12);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-abnormal);
+  cursor: pointer;
+}
+
+.alerts-badge {
+  background: var(--color-abnormal);
+  color: #fff;
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 10px;
+}
+
+.analyst-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.analyst-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  border: 1px solid var(--accent-cyan);
+}
+
+/* 2. Main Workspace Body */
+#workspace-body {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 52px - 56px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 3. Left Narrow Sidebar */
+#left-sidebar {
+  width: 64px;
+  background: #080d16;
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+  gap: 6px;
+  z-index: 10;
+}
+
+.sidebar-item {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-muted);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.sidebar-item svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sidebar-item span {
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.sidebar-item.active {
+  background: rgba(0, 229, 163, 0.12);
+  color: var(--color-persistent);
+  border: 1px solid rgba(0, 229, 163, 0.3);
+}
+
+.sidebar-divider {
+  width: 32px;
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 6px 0;
+}
+
+/* 4. Center Main GIS Map Area */
+#map-container-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Top Map Controls / Filter Bar */
+#map-filter-bar {
+  height: 42px;
+  background: #0d1420;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  gap: 10px;
+  z-index: 10;
+}
+
+.filter-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-select {
+  background: #131c2b;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  padding: 5px 9px;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filter-select:hover, .filter-select:focus {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #131c2b;
+  border: 1px solid var(--border-subtle);
+  border-radius: 5px;
+  padding: 4px 8px;
+  gap: 6px;
+}
+
+.search-box input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 11.5px;
+  outline: none;
+  width: 140px;
+}
+
+.search-box input::placeholder {
+  color: var(--text-muted);
+}
+
+.filter-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn-sm {
+  background: #172336;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.action-btn-sm:hover {
+  background: #1e2e46;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.action-btn-primary {
+  background: #c0392b;
+  color: #fff;
+  border: none;
+}
+
+.action-btn-primary:hover {
+  background: #e74c3c;
+}
+
+/* GIS Map Canvas Viewport */
+#gis-map {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #0b111a;
+}
+
+/* ==========================================================================
+   Apple Weather Map UI System: Frosted Glassmorphism, Segmented Pill,
+   Circular FABs, Continuous Thermal Radar Legend, & 48h Timeline Scrubber
+   ========================================================================== */
+
+/* 1. Apple Weather Top Floating Segmented Pill */
+#apple-map-mode-pill {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 30px;
+  background: rgba(13, 20, 32, 0.74);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  z-index: 10;
+  user-select: none;
+}
+
+.apple-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 24px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.apple-pill-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.apple-pill-btn.active {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  font-weight: 600;
+}
+
+.apple-pill-icon {
+  font-size: 13px;
+}
+
+/* 2. Apple Weather Floating Action Button (FAB) Stack */
+#apple-map-fabs {
+  position: absolute;
+  top: 56px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+.apple-fab {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 20, 32, 0.74);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f1f5f9;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.apple-fab svg {
+  width: 17px;
+  height: 17px;
+  transition: transform 0.2s ease;
+}
+
+.apple-fab:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  transform: scale(1.08);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.apple-fab:active {
+  transform: scale(0.95);
+}
+
+.apple-fab-divider {
+  width: 20px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 1px auto;
+}
+
+/* 3. Apple Weather Bottom Thermal Gradient Legend */
+#apple-weather-legend {
+  position: absolute;
+  bottom: 58px;
+  left: 16px;
+  width: 280px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(13, 20, 32, 0.76);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  z-index: 10;
+  user-select: none;
+}
+
+.apple-legend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.apple-legend-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.apple-legend-val {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+}
+
+.apple-gradient-track {
+  position: relative;
+  width: 100%;
+  height: 9px;
+  margin: 4px 0 6px 0;
+}
+
+.apple-gradient-bar {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    #00e5a3 0%,
+    #06b6d4 20%,
+    #f59e0b 50%,
+    #f97316 75%,
+    #ef4444 90%,
+    #ff4d94 100%
+  );
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+.apple-gradient-pointer {
+  position: absolute;
+  top: -3px;
+  left: 20%;
+  width: 4px;
+  height: 15px;
+  border-radius: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 8px #ffffff, 0 0 16px rgba(255, 77, 77, 0.9);
+  transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(-50%);
+}
+
+.apple-gradient-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8.5px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* 4. Apple Weather Time Radar Scrubber / Playhead */
+#apple-radar-scrubber {
+  position: absolute;
+  bottom: 58px;
+  left: calc(50% + 40px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  min-width: 420px;
+  border-radius: 20px;
+  background: rgba(13, 20, 32, 0.78);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  z-index: 10;
+  user-select: none;
+}
+
+.radar-play-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.radar-play-btn svg {
+  width: 15px;
+  height: 15px;
+  fill: #fff;
+  margin-left: 1px;
+}
+
+.radar-play-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.08);
+}
+
+.radar-play-btn:active {
+  transform: scale(0.96);
+}
+
+.radar-track-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.radar-track-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.radar-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.radar-timestamp {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+/* Apple Sleek Slider */
+.apple-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 4px 0;
+}
+
+.apple-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.apple-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.radar-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8.5px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.radar-live-tick {
+  color: var(--color-persistent);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* 5. Apple Weather Floating Micro Hover Tooltip */
+.apple-hover-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  pointer-events: none;
+  z-index: 25;
+  min-width: 190px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(13, 20, 32, 0.88);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transform: translate(-50%, -125%);
+  transition: opacity 0.15s ease;
+}
+
+.apple-hover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.apple-hover-id {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  color: #fff;
+}
+
+.apple-hover-frp {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  color: #ff5252;
+}
+
+.apple-hover-fac {
+  font-size: 10px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+  margin-bottom: 6px;
+}
+
+.apple-hover-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9.5px;
+}
+
+.apple-hover-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255, 77, 77, 0.2);
+  color: #ff7676;
+  border: 1px solid rgba(255, 77, 77, 0.3);
+}
+
+.apple-hover-dist {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* 5. Right Event Details Panel (Intelligence Dossier) */
+#event-details-panel {
+  width: 420px;
+  background: #0d1420;
+  border-left: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 15;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.35);
+}
+
+#event-details-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+#event-details-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.panel-header {
+  padding: 14px 16px;
+  background: #111a29;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.panel-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.panel-event-id {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.panel-classification-banner {
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 12px 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.banner-abnormal {
+  background: rgba(255, 77, 77, 0.15);
+  border: 1px solid rgba(255, 77, 77, 0.4);
+  color: var(--color-abnormal);
+}
+
+.banner-persistent {
+  background: rgba(0, 229, 163, 0.12);
+  border: 1px solid rgba(0, 229, 163, 0.35);
+  color: var(--color-persistent);
+}
+
+.banner-natural {
+  background: rgba(255, 167, 38, 0.15);
+  border: 1px solid rgba(255, 167, 38, 0.35);
+  color: var(--color-natural);
+}
+
+.banner-insufficient {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: var(--color-insufficient);
+}
+
+.banner-uncertain {
+  background: rgba(100, 116, 139, 0.15);
+  border: 1px solid rgba(100, 116, 139, 0.35);
+  color: var(--color-uncertain);
+}
+
+/* Industrial Probability Bar */
+.prob-meter-section {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.prob-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.prob-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #fff;
+}
+
+.prob-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.prob-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #06b6d4, var(--color-persistent));
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Telemetry Stats Grid */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.telemetry-cell {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.cell-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.cell-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.cell-subtext {
+  font-size: 9.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Evidence Section */
+.evidence-section {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.section-heading {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.evidence-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.evidence-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+.evidence-status-pass {
+  color: var(--color-persistent);
+}
+
+.evidence-status-warn {
+  color: var(--color-abnormal);
+}
+
+.evidence-status-info {
+  color: var(--accent-cyan);
+}
+
+/* AI Explanation Box */
+.ai-explanation-box {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgba(6, 182, 212, 0.06);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.ai-explanation-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-bottom: 4px;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Historical FRP Chart Section */
+.chart-section {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.chart-canvas-wrap {
+  width: 100%;
+  height: 110px;
+  background: #080d16;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+#frp-chart-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 12px;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chart-line-baseline {
+  width: 12px;
+  height: 2px;
+  background: #94a3b8;
+  border-top: 1px dashed #94a3b8;
+}
+
+.chart-dot-current {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-abnormal);
+}
+
+/* Thermal Behaviour Fingerprint */
+.behaviour-section {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.behaviour-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.behaviour-cell {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 6px 8px;
+  text-align: center;
+}
+
+.behaviour-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.behaviour-label {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Analyst Action Toolbar */
+.analyst-actions-section {
+  padding: 12px 16px 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.analyst-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-investigate {
+  background: var(--color-abnormal);
+  color: #fff;
+}
+
+.btn-investigate:hover {
+  background: #ff6666;
+}
+
+.btn-verify {
+  background: rgba(0, 229, 163, 0.15);
+  color: var(--color-persistent);
+  border: 1px solid rgba(0, 229, 163, 0.4);
+}
+
+.btn-verify:hover {
+  background: rgba(0, 229, 163, 0.25);
+}
+
+.btn-export {
+  background: #172336;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.btn-export:hover {
+  background: #20314a;
+  color: #fff;
+}
+
+/* 6. Bottom KPI Strip */
+#bottom-kpi-strip {
+  height: 56px;
+  background: #080d16;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 12px;
+  z-index: 20;
+}
+
+.kpi-cards-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.kpi-card {
+  background: #0f1725;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kpi-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #141f32;
+}
+
+.kpi-number {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.kpi-label {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.kpi-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* 7. Collapsible Recent Alerts Drawer */
+#alerts-drawer {
+  position: absolute;
+  bottom: 56px;
+  left: 64px;
+  right: 420px;
+  background: rgba(11, 17, 26, 0.95);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-subtle);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 12;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.alerts-drawer-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.alerts-scroll-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  flex: 1;
+  padding-bottom: 2px;
+}
+
+.alerts-scroll-row::-webkit-scrollbar {
+  height: 3px;
+}
+
+.alerts-scroll-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.alert-card-pill {
+  background: #121c2b;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.alert-card-pill:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: #18253a;
+}
+
+.alert-card-pill.critical {
+  border-color: rgba(255, 77, 77, 0.4);
+}
+
+.alert-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.alert-dot.critical {
+  background: var(--color-abnormal);
+  box-shadow: 0 0 8px var(--color-abnormal);
+}
+
+.alert-dot.high {
+  background: var(--color-abnormal);
+}
+
+.alert-dot.medium {
+  background: var(--color-natural);
+}
+
+.alert-dot.info {
+  background: var(--color-persistent);
+}
+
+.alert-text-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.alert-pill-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.alert-pill-meta {
+  font-size: 9.5px;
+  color: var(--text-muted);
+}
+
+/* Animations */
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* MapLibre map customization for dark theme */
+.maplibregl-ctrl-group {
+  background: var(--bg-glass) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 6px !important;
+  overflow: hidden;
+}
+
+.maplibregl-ctrl-group button {
+  border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+.maplibregl-ctrl-group button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.maplibregl-ctrl-icon {
+  filter: invert(1) brightness(1.2);
+}

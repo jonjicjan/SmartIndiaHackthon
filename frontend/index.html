@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThermalGuard AI — Intelligence Analyst GIS Workspace</title>
+  
+  <!-- MapLibre GL CSS -->
+  <link href="./maplibre-gl.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css';" />
+  
+  <!-- Custom Dark GIS Stylesheet -->
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+<div id="app-shell">
+
+  <!-- 1. Top Header Bar -->
+  <header id="top-header">
+    <div class="header-left">
+      <div class="brand-icon">🛡️</div>
+      <div class="brand-title-wrap">
+        <h1>ThermalGuard <span>AI</span></h1>
+        <div class="brand-subtitle">Satellite Intelligence for Industrial Thermal Monitoring</div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="live-status-pill">
+        <span class="pulse-dot"></span>
+        <span id="live-status-label">LIVE DATA</span>
+      </div>
+
+      <div class="mode-toggle-group">
+        <button id="mode-btn-live" class="mode-btn active" title="Real-time NASA FIRMS satellite ingestion">LIVE</button>
+        <button id="mode-btn-replay" class="mode-btn" title="Curated high-fidelity scenario replay">REPLAY</button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div id="header-clock" class="clock-display">2026-09-19 12:00:00 UTC</div>
+      
+      <div class="alerts-header-pill" onclick="document.getElementById('alerts-drawer').scrollIntoView({behavior: 'smooth'})">
+        <span>🔔 Alerts</span>
+        <span id="alerts-badge-count" class="alerts-badge">4</span>
+      </div>
+
+      <div class="analyst-profile">
+        <div class="analyst-avatar">👤</div>
+        <span>Analyst: Ops Room</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Main Workspace Body -->
+  <div id="workspace-body">
+    
+    <!-- 3. Left Narrow Sidebar Navigation -->
+    <nav id="left-sidebar">
+      <a href="#" class="sidebar-item" title="Operational Overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Dash</span>
+      </a>
+
+      <a href="#" class="sidebar-item active" title="Live GIS Operational Map">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+        <span>Map</span>
+      </a>
+
+      <a href="#" class="sidebar-item" title="Abnormal Thermal Alerts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        <span>Alerts</span>
+      </a>
+
+      <a href="#" class="sidebar-item" title="Thermal Analytics & Frequency">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        <span>Analytics</span>
+      </a>
+
+      <div class="sidebar-divider"></div>
+
+      <a href="#" class="sidebar-item" title="Monitored Industrial Facilities">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7v14M13 7v14M21 11v10M9 3v4M17 3v8"></path></svg>
+        <span>Facilities</span>
+      </a>
+
+      <a href="#" class="sidebar-item" title="Historical Baseline DB">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span>History</span>
+      </a>
+
+      <a href="#" class="sidebar-item" title="Intelligence Dossiers & Reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <span>Reports</span>
+      </a>
+
+      <a href="#" class="sidebar-item" title="System Settings & Config">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <!-- 4. Center Main GIS Map Area -->
+    <main id="map-container-wrap">
+      
+      <!-- Top Map Controls / Filter Bar -->
+      <div id="map-filter-bar">
+        <div class="filter-left">
+          <select id="time-filter" class="filter-select">
+            <option value="24h">Last 24 Hours</option>
+            <option value="48h">Last 48 Hours</option>
+            <option value="7d" selected>Last 5–7 Days</option>
+            <option value="30d">Last 30 Days</option>
+          </select>
+
+          <select id="class-filter" class="filter-select">
+            <option value="ALL">All Classifications</option>
+            <option value="ABNORMAL">Potential Abnormal Event</option>
+            <option value="PERSISTENT">Persistent Industrial Source</option>
+            <option value="NATURAL">Natural / Wildfire / Stubble</option>
+            <option value="INSUFFICIENT">History Insufficient</option>
+            <option value="UNCERTAIN">Uncertain / Provisional</option>
+          </select>
+
+          <select id="region-filter" class="filter-select">
+            <option value="all_india" selected>Pan-India National Overview (Whole Country)</option>
+            <option value="north_india">Zone: Northern India (Agri/Thermal)</option>
+            <option value="west_india">Zone: Western India (Petrochem/Refining)</option>
+            <option value="south_india">Zone: Southern India (Energy/Industry)</option>
+            <option value="east_central">Zone: Eastern & Central (Steel/Mining)</option>
+            <option value="northeast">Zone: Northeastern India (Upstream Oil)</option>
+            <option value="gujarat">State: Gujarat Industrial Belt</option>
+            <option value="punjab">State: Punjab & Haryana (Stubble/Agri)</option>
+            <option value="odisha">State: Odisha & Jharkhand (Steel/Mining)</option>
+            <option value="maharashtra">State: Maharashtra (Refining Hub)</option>
+            <option value="kutch">Flagship AOI: Kutch & Jamnagar Basin</option>
+          </select>
+
+          <select id="conf-filter" class="filter-select">
+            <option value="0">Confidence: All</option>
+            <option value="40">Confidence ≥ 40%</option>
+            <option value="70">Confidence ≥ 70%</option>
+          </select>
+
+          <div class="search-box">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="search-input" placeholder="Search event / facility..." />
+          </div>
+        </div>
+
+        <div class="filter-right">
+          <button id="refresh-btn" class="action-btn-sm action-btn-primary" title="Pull live satellite stream and run CFSA pipeline">
+            <span>⟳ Refresh Live Data</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- GIS Map Canvas -->
+      <div id="gis-map"></div>
+
+      <!-- 1. Apple Weather Top Floating Mode Segmented Pill -->
+      <div id="apple-map-mode-pill">
+        <button class="apple-pill-btn active" id="btn-mode-heatmap" title="Toggle Fluid Thermal Radar Heatmap">
+          <span class="apple-pill-icon">🔥</span>
+          <span>Thermal Radar</span>
+        </button>
+        <button class="apple-pill-btn active" id="btn-mode-hotspots" title="Toggle Pinpoint Hotspot Nodes">
+          <span class="apple-pill-icon">🔴</span>
+          <span>Hotspot Nodes</span>
+        </button>
+        <button class="apple-pill-btn" id="btn-mode-facilities" title="Toggle Industrial Infrastructure Markers">
+          <span class="apple-pill-icon">🏭</span>
+          <span>Facility Mesh</span>
+        </button>
+      </div>
+
+      <!-- 2. Apple Weather Floating Action Button (FAB) Stack -->
+      <div id="apple-map-fabs">
+        <button class="apple-fab" id="fab-basemap" title="Switch Basemap Style (Dark Matter / Satellite / Positron)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        </button>
+        <button class="apple-fab" id="fab-recenter" title="Recenter to Pan-India Overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><circle cx="12" cy="12" r="8"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="2" y1="12" x2="4" y2="12"></line></svg>
+        </button>
+        <div class="apple-fab-divider"></div>
+        <button class="apple-fab" id="fab-zoom-in" title="Zoom In">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <button class="apple-fab" id="fab-zoom-out" title="Zoom Out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+      </div>
+
+      <!-- 3. Apple Weather Bottom Thermal Gradient Legend -->
+      <div id="apple-weather-legend">
+        <div class="apple-legend-header">
+          <span class="apple-legend-title">THERMAL RADIATIVE POWER (FRP)</span>
+          <span id="apple-legend-live-val" class="apple-legend-val">Live VIIRS Gradient</span>
+        </div>
+        <div class="apple-gradient-track">
+          <div class="apple-gradient-bar"></div>
+          <div id="apple-legend-pointer" class="apple-gradient-pointer"></div>
+        </div>
+        <div class="apple-gradient-labels">
+          <span>&lt; 5 MW (Baseline)</span>
+          <span>25 MW</span>
+          <span>75 MW (Elevated)</span>
+          <span>150+ MW (Critical Flare)</span>
+        </div>
+      </div>
+
+      <!-- 4. Apple Weather Time Radar Scrubber / Playhead -->
+      <div id="apple-radar-scrubber">
+        <button id="radar-play-btn" class="radar-play-btn" title="Play/Pause 48h Radar Loop">
+          <svg id="radar-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        </button>
+        <div class="radar-track-wrap">
+          <div class="radar-track-info">
+            <span class="radar-label">TIMELINE RADAR</span>
+            <span id="radar-timestamp" class="radar-timestamp">Last 48 Hours → Live NOAA-20/21</span>
+          </div>
+          <input type="range" id="radar-slider" min="0" max="100" value="100" class="apple-slider" />
+          <div class="radar-ticks">
+            <span>-48h</span>
+            <span>-36h</span>
+            <span>-24h</span>
+            <span>-12h</span>
+            <span class="radar-live-tick">● LIVE PASS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Apple Weather Floating Micro Hover Tooltip -->
+      <div id="apple-hover-card" class="apple-hover-card">
+        <div class="apple-hover-header">
+          <span id="apple-hover-id" class="apple-hover-id">TG-4082</span>
+          <span id="apple-hover-frp" class="apple-hover-frp">245.4 MW</span>
+        </div>
+        <div id="apple-hover-fac" class="apple-hover-fac">Jamnagar Petrochemical Complex</div>
+        <div class="apple-hover-meta">
+          <span id="apple-hover-class" class="apple-hover-badge">Abnormal Event</span>
+          <span id="apple-hover-dist" class="apple-hover-dist">732 m</span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- 5. Right Event Details Panel (Intelligence Dossier) -->
+    <aside id="event-details-panel">
+      
+      <div class="panel-header">
+        <div class="panel-title-wrap">
+          <span id="ev-tag" class="panel-tag">SELECTED EVENT</span>
+          <span id="ev-event-id" class="panel-event-id">TG-4082</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span id="ev-confidence" style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary);">86.4% Conf.</span>
+        </div>
+      </div>
+
+      <!-- Classification Banner -->
+      <div id="ev-banner" class="panel-classification-banner banner-abnormal">
+        <span id="ev-class-name">Potential Abnormal Industrial Event</span>
+        <span style="font-size:10px; font-family:var(--font-mono);">CFSA Level 1</span>
+      </div>
+
+      <!-- Industrial Probability Gauge -->
+      <div class="prob-meter-section">
+        <div class="prob-header">
+          <span>Industrial Probability</span>
+          <span id="ev-prob-val" class="prob-value">91%</span>
+        </div>
+        <div class="prob-track">
+          <div id="ev-prob-bar" class="prob-fill" style="width: 91%;"></div>
+        </div>
+      </div>
+
+      <!-- Telemetry Stats Grid -->
+      <div class="telemetry-grid">
+        <div class="telemetry-cell">
+          <div class="cell-label">Current FRP</div>
+          <div id="ev-current-frp" class="cell-value">245.4 MW</div>
+          <div class="cell-subtext">VIIRS 375m Radiative Flux</div>
+        </div>
+
+        <div class="telemetry-cell">
+          <div class="cell-label">Historical Baseline</div>
+          <div id="ev-baseline-frp" class="cell-value">118.0 MW</div>
+          <div class="cell-subtext">30-Day Rolling Median</div>
+        </div>
+
+        <div class="telemetry-cell">
+          <div class="cell-label">FRP Deviation</div>
+          <div id="ev-frp-dev" class="cell-value" style="color:var(--color-abnormal)">+2.42σ</div>
+          <div class="cell-subtext">Standard Deviation Anomaly</div>
+        </div>
+
+        <div class="telemetry-cell">
+          <div class="cell-label">Nearest Facility</div>
+          <div id="ev-facility-name" class="cell-value" style="font-size:11.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Jamnagar Refinery</div>
+          <div id="ev-facility-dist" class="cell-subtext">733 m proximity</div>
+        </div>
+
+        <div class="telemetry-cell">
+          <div class="cell-label">Land Cover Proxy</div>
+          <div id="ev-landcover" class="cell-value" style="font-size:11px;">Built: 82% | Tree: 18%</div>
+          <div class="cell-subtext">OSM 1 km Buffer Sampling</div>
+        </div>
+
+        <div class="telemetry-cell">
+          <div class="cell-label">Site Recurrence</div>
+          <div id="ev-recurrence" class="cell-value">24 detections / 30d</div>
+          <div class="cell-subtext">Location Key Grid Match</div>
+        </div>
+      </div>
+
+      <!-- Evidence Section ("Why was this classified?") -->
+      <div class="evidence-section">
+        <div class="section-heading">
+          <span>Why Was This Classified?</span>
+          <span style="font-size:9.5px; color:var(--text-muted); font-family:var(--font-mono);">CFSA v2.1</span>
+        </div>
+        
+        <div id="ev-cards-list" class="evidence-cards-list">
+          <!-- Populated dynamically via app.js -->
+        </div>
+
+        <!-- AI Explanation Narrative -->
+        <div class="ai-explanation-box">
+          <div class="ai-explanation-header">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z"></path></svg>
+            <span>AI Evidence Explanation</span>
+          </div>
+          <div id="ev-ai-explanation">
+            Industrial probability established via proximity to petrochemical refining infrastructure and high historical recurrence. Current FRP exceeds historical baseline by +2.42σ, triggering an abnormal flaring alert.
+          </div>
+        </div>
+      </div>
+
+      <!-- Historical FRP Timeline Chart -->
+      <div class="chart-section">
+        <div class="chart-header">
+          <div class="section-heading" style="margin-bottom:0;">
+            <span>Historical FRP Baseline Timeline</span>
+          </div>
+          <span style="font-size:9.5px; font-family:var(--font-mono); color:var(--text-muted);">30-Day Window</span>
+        </div>
+
+        <div class="chart-canvas-wrap">
+          <canvas id="frp-chart-canvas"></canvas>
+        </div>
+
+        <div class="chart-legend">
+          <div class="chart-legend-item">
+            <span class="chart-line-baseline"></span>
+            <span>Historical Baseline (Mean)</span>
+          </div>
+          <div class="chart-legend-item">
+            <span class="chart-dot-current"></span>
+            <span>Current Detected Anomaly</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thermal Behaviour Fingerprint -->
+      <div class="behaviour-section">
+        <div class="section-heading">
+          <span>Thermal Fingerprint / Behaviour</span>
+        </div>
+        <div class="behaviour-grid">
+          <div class="behaviour-cell">
+            <div id="tb-recurrence" class="behaviour-val">82%</div>
+            <div class="behaviour-label">Recurrence</div>
+          </div>
+          <div class="behaviour-cell">
+            <div id="tb-night-ratio" class="behaviour-val">46%</div>
+            <div class="behaviour-label">Night Ratio</div>
+          </div>
+          <div class="behaviour-cell">
+            <div id="tb-burst" class="behaviour-val">2.1×</div>
+            <div class="behaviour-label">Burst Index</div>
+          </div>
+          <div class="behaviour-cell">
+            <div id="tb-interval-cv" class="behaviour-val">0.18</div>
+            <div class="behaviour-label">Interval CV</div>
+          </div>
+          <div class="behaviour-cell">
+            <div id="tb-cluster-growth" class="behaviour-val">Stable</div>
+            <div class="behaviour-label">Expansion</div>
+          </div>
+          <div class="behaviour-cell">
+            <div id="tb-periodicity" class="behaviour-val">Cyclic</div>
+            <div class="behaviour-label">Periodicity</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analyst Action Toolbar -->
+      <div class="analyst-actions-section">
+        <button id="btn-investigate" class="analyst-btn btn-investigate" title="Escalate to active ground investigation">
+          <span>🔍 Investigate</span>
+        </button>
+        <button id="btn-verify" class="analyst-btn btn-verify" title="Confirm valid industrial operator flaring">
+          <span>✓ Verify</span>
+        </button>
+        <button id="btn-export" class="analyst-btn btn-export" title="Download signed intelligence dossier (JSON)">
+          <span>📄 Export</span>
+        </button>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- 6. Collapsible Recent Intelligence Alerts Drawer -->
+  <div id="alerts-drawer">
+    <div class="alerts-drawer-title">Recent Intelligence Alerts:</div>
+    <div id="alerts-scroll-row" class="alerts-scroll-row">
+      <!-- Injected via app.js -->
+    </div>
+  </div>
+
+  <!-- 7. Bottom KPI Strip -->
+  <footer id="bottom-kpi-strip">
+    <div class="kpi-cards-wrap">
+      <div class="kpi-card" onclick="document.getElementById('class-filter').value='ALL'; applyFilters();">
+        <span class="kpi-indicator" style="background:#38bdf8;"></span>
+        <div>
+          <div id="kpi-total-hotspots" class="kpi-number">8</div>
+          <div class="kpi-label">Active Hotspots</div>
+        </div>
+      </div>
+
+      <div class="kpi-card" onclick="document.getElementById('class-filter').value='PERSISTENT'; applyFilters();">
+        <span class="kpi-indicator" style="background:#00e5a3;"></span>
+        <div>
+          <div id="kpi-industrial-count" class="kpi-number">3</div>
+          <div class="kpi-label">Industrial Sources</div>
+        </div>
+      </div>
+
+      <div class="kpi-card" onclick="document.getElementById('class-filter').value='ABNORMAL'; applyFilters();">
+        <span class="kpi-indicator" style="background:#ff4d4d;"></span>
+        <div>
+          <div id="kpi-abnormal-count" class="kpi-number">2</div>
+          <div class="kpi-label">Potential Abnormal</div>
+        </div>
+      </div>
+
+      <div class="kpi-card" onclick="document.getElementById('class-filter').value='NATURAL'; applyFilters();">
+        <span class="kpi-indicator" style="background:#ffa726;"></span>
+        <div>
+          <div id="kpi-natural-count" class="kpi-number">3</div>
+          <div class="kpi-label">Natural / Wildfire</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-indicator" style="background:#a3e635;"></span>
+        <div>
+          <div id="kpi-monitored-facilities" class="kpi-number">12</div>
+          <div class="kpi-label">Monitored Facilities</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); white-space:nowrap;">
+      NASA FIRMS VIIRS NOAA-20/21 • OSM Overpass • PostGIS CFSA
+    </div>
+  </footer>
+
+</div>
+
+<!-- Scripts -->
+<script src="./maplibre-gl.js" onerror="this.onerror=null;this.src='https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js';"></script>
+<script src="./app.js"></script>
+
+</body>
+</html>
